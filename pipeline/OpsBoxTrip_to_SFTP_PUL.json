@@ -1,0 +1,46 @@
+{
+	"name": "OpsBoxTrip_to_SFTP_PUL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data to ETL SQL TABLE",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlMISource",
+						"sqlReaderQuery": "SELECT [Id]\n      ,[TemplateId]\n      ,[Seq]\n      ,[Day]\n      ,[Week]\n      ,[ApptTime]\n      ,[StopId]\n      ,[Name]\n      ,[Address]\n      ,[City]\n      ,[State]\n      ,[ZipCode]\n      ,[TMWRouteId]\n      ,[StopType]\n      ,[EventCode]\n      ,[RouteName]\n      ,[RouteId]\n      ,[WindowOpen]\n      ,[WindowClose]\n      ,[DriverId1]\n      ,[TractorId]\n      ,[TrailerId]\n      ,[ETA]\n      ,[SpecInst]\n      ,[Contact]\n      ,[Ref1]\n      ,[Ref2]\n      ,[Ref3]\n      ,[Cube]\n      ,[Weight]\n      ,[Qty1]\n      ,[OrderBillTo]\n      ,[ServiceTime]\n  FROM [OpsBox_Test].[IEM].[TripTemplateDetails]\n  where ETA between '2024-03-01' and '2024-03-13' \nand RouteId in ('4412','5742','5749','4526','4529')",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "SftpWriteSettings",
+							"copyBehavior": "PreserveHierarchy",
+							"operationTimeout": "01:00:00",
+							"useTempFileRename": true
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".csv"
+						}
+					},
+					"enableStaging": false
+				}
+			}
+		],
+		"folder": {
+			"name": "IEMPOC"
+		},
+		"annotations": []
+	}
+}
